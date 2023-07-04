@@ -64,14 +64,28 @@ export default class App extends Component {
     }
   }
 
-  // componentDidMount() {
-  //   apiServices.fetchImages("dog", 1).then((images) => console.log(images));
-  // }
-
   handleImgDescrChange = (newDescr) => {
     this.setState({
       imageDescription: newDescr,
     });
+  };
+
+  handleLoadMoreClick = () => {
+    this.setState({
+      status: "pending",
+    });
+
+    const { imageDescription, page } = this.state;
+
+    const newPage = page + 1;
+
+    apiServices.fetchImages(imageDescription, newPage).then((data) =>
+      this.setState((prevState) => ({
+        status: "resolved",
+        page: newPage,
+        imagesArr: [...prevState.imagesArr, ...data.hits],
+      }))
+    );
   };
 
   render() {
@@ -83,7 +97,8 @@ export default class App extends Component {
       <div className={styles.app}>
         <Searchbar onSearchClick={this.handleImgDescrChange} />
 
-        {status === "resolved" && (
+        {(status === "resolved" ||
+          (status === "pending" && imagesArr.length > 0)) && (
           <ImageGallery>
             {imagesArr.map((el) => (
               <ImageGalleryItem
@@ -96,7 +111,10 @@ export default class App extends Component {
         )}
 
         {status === "resolved" && (
-          <LoadMoreBtn isDisabled={loadMoreDisabledStatus} />
+          <LoadMoreBtn
+            onLoadMoreClick={this.handleLoadMoreClick}
+            isDisabled={loadMoreDisabledStatus}
+          />
         )}
 
         {status === "pending" && <Loader />}

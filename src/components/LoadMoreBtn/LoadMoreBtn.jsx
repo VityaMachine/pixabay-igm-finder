@@ -1,9 +1,15 @@
 import styles from "./LoadMoreBtn.module.css";
 
-const LoadMoreBtn = ({isDisabled}) => {
+const LoadMoreBtn = ({ isDisabled, onLoadMoreClick }) => {
   return (
     <div className={styles.ButtonContainer}>
-      <button className={styles.Button} disabled={isDisabled}>Load more</button>
+      <button
+        onClick={onLoadMoreClick}
+        className={styles.Button}
+        disabled={isDisabled}
+      >
+        {!isDisabled ? "Load more" : "No more images to load"}
+      </button>
     </div>
   );
 };
