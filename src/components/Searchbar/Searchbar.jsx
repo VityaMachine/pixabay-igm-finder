@@ -13,14 +13,11 @@ export default class Searchbar extends Component {
     });
   };
 
-
-  handleSubmit = e  => {
-
+  handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log(this.state.searchInput);
-
-  }
+    this.props.onSearchClick(this.state.searchInput);
+  };
 
   render() {
     const { searchInput } = this.state;
