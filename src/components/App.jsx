@@ -9,6 +9,7 @@ import ImageGallery from "./ImageGallery";
 import Loader from "./Loader/Loader";
 import ImageGalleryItem from "./ImageGalleryItem/ImageGalleryItem";
 import LoadMoreBtn from "./LoadMoreBtn/LoadMoreBtn";
+import Modal from "./Modal/Modal";
 
 export default class App extends Component {
   state = {
@@ -28,6 +29,8 @@ export default class App extends Component {
     if (thisImgDescr.length > 0 && prevImgDescr !== thisImgDescr) {
       this.setState({
         status: "pending",
+        imagesArr: [],
+        page: null,
       });
 
       apiServices
@@ -88,8 +91,28 @@ export default class App extends Component {
     );
   };
 
+  handleModalOpen = (largeImgUrl, imgDescr) => {
+    this.setState({
+      largeImgUrl,
+    });
+  };
+
+  handleModalClose = () => {
+    this.setState({
+      largeImgUrl: null,
+    })
+  }
+
+
   render() {
-    const { status, imagesArr, page, totalHits } = this.state;
+    const {
+      status,
+      imagesArr,
+      page,
+      totalHits,
+      largeImgUrl,
+      imageDescription,
+    } = this.state;
 
     const loadMoreDisabledStatus = totalHits < page * 12;
 
@@ -104,7 +127,9 @@ export default class App extends Component {
               <ImageGalleryItem
                 key={el.id}
                 imgUrl={el.webformatURL}
+                largeImgUrl={el.largeImageURL}
                 imgText={el.tags}
+                onModalOpen={this.handleModalOpen}
               />
             ))}
           </ImageGallery>
@@ -118,6 +143,10 @@ export default class App extends Component {
         )}
 
         {status === "pending" && <Loader />}
+
+        {largeImgUrl && (
+          <Modal largeImgUrl={largeImgUrl} imgDescr={imageDescription} onClose={this.handleModalClose}/>
+        )}
       </div>
     );
   }
