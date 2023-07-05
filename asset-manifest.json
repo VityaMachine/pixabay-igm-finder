@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/pixabay-img-finder/static/css/main.67207116.css",
+    "main.js": "/pixabay-img-finder/static/js/main.2bce9f4b.js",
+    "index.html": "/pixabay-img-finder/index.html",
+    "main.67207116.css.map": "/pixabay-img-finder/static/css/main.67207116.css.map",
+    "main.2bce9f4b.js.map": "/pixabay-img-finder/static/js/main.2bce9f4b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.67207116.css",
+    "static/js/main.2bce9f4b.js"
+  ]
+}
