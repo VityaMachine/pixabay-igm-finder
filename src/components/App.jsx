@@ -10,6 +10,8 @@ import Loader from "./Loader/Loader";
 import ImageGalleryItem from "./ImageGalleryItem/ImageGalleryItem";
 import LoadMoreBtn from "./LoadMoreBtn/LoadMoreBtn";
 import Modal from "./Modal/Modal";
+import IdlePage from "./IdleView/IdleView";
+import ErrorView from "./ErrorView/ErrorView";
 
 export default class App extends Component {
   state = {
@@ -47,7 +49,7 @@ export default class App extends Component {
 
           if (data.hits.length === 0) {
             this.setState({
-              status: "rejeected",
+              status: "rejected",
               error: `images ${thisImgDescr} not found`,
               images: [],
               totalHits: 0,
@@ -100,9 +102,8 @@ export default class App extends Component {
   handleModalClose = () => {
     this.setState({
       largeImgUrl: null,
-    })
-  }
-
+    });
+  };
 
   render() {
     const {
@@ -112,6 +113,7 @@ export default class App extends Component {
       totalHits,
       largeImgUrl,
       imageDescription,
+      error,
     } = this.state;
 
     const loadMoreDisabledStatus = totalHits < page * 12;
@@ -119,6 +121,8 @@ export default class App extends Component {
     return (
       <div className={styles.app}>
         <Searchbar onSearchClick={this.handleImgDescrChange} />
+
+        {status === "idle" && <IdlePage />}
 
         {(status === "resolved" ||
           (status === "pending" && imagesArr.length > 0)) && (
@@ -142,10 +146,16 @@ export default class App extends Component {
           />
         )}
 
+        {status === "rejected" && <ErrorView error={error} />}
+
         {status === "pending" && <Loader />}
 
         {largeImgUrl && (
-          <Modal largeImgUrl={largeImgUrl} imgDescr={imageDescription} onClose={this.handleModalClose}/>
+          <Modal
+            largeImgUrl={largeImgUrl}
+            imgDescr={imageDescription}
+            onClose={this.handleModalClose}
+          />
         )}
       </div>
     );
